@@ -1,0 +1,23 @@
+\chapter{Deployment}
+
+% \section{Traditional Deployment vs Application Containerization}
+\section{Application Containerization}
+    In this system, we use Docker\cite{docker} to containerize our application into 5 containers. There are MongoDB, Scalatra, Frontend, Version Service, and Nginx containers as shown in Figure \ref{fig:system-architecture}. There are several reasons why we choose to use Docker for deploying our application instead of deploying it in a traditional way. The first reason is the different environment between development and production. If we were to deploy our application in a traditional way, we would need to configure each of our components (MongoDB, backend, frontend, and Nginx) step by step. If our server is crashed and we need to deploy our application into the new server, we will need to redo every step from the beginning. However, when we use Docker for deployment, the different environments is no longer a problem since we can use production environment on our development machine (e.g., laptop) and then deploy it with the same configuration to our server. The  second reason why we choose Docker for deployment is that the host system does not have to depend on any dependencies of the application. As long as the host system can run Docker, it should be able to run Docker containers whereas on the traditional deployment, we would have to install all the dependencies that our application needs. The third reason is the resource utilization. Docker containers are lightweight and each container will have its own resources which are isolated from other containers. A container will not consume all the available resources of the host system in which can decrease the performance of other applications.
+    
+    \newpage
+    \section{Containers Flow}
+        When a http request comes to / with port 80, it will go to Nginx Container and the container will route it to Frontend Container. When the Frontend Container calls API service via /api, the request will first go to Nginx Container and then will be routed to Scalatra Container. Scalatra Container connects to MongoDB Container for user authentication. Finally, there is also Version Service Container which provides the version number of both frontend and backend by showing the number of commits.
+        
+
+    \FloatBarrier
+    	\begin{figure}[h!]
+            \centering
+                % can use width=\linewidth
+        		\includegraphics[width=\linewidth]{images/chapter-07/system-architecture.png}
+        		\caption{Containerized Application Architecture}
+        		\label{fig:system-architecture}
+        \end{figure}
+    \FloatBarrier
+    
+\section{Failure Handling}
+    Failure handling in this project is convenient since we containerized our application using Docker. There are restart policies that Docker has provided. The restart policy that we are using in the system is "unless-stopped" which means it will always restart the container no matter the exit status is but it will not restart the container if the container is stopped by the user.

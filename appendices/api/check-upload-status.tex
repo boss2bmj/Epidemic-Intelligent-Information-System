@@ -1,0 +1,102 @@
+
+body = 
+\begin{minted}[fontsize=\scriptsize]{javascript}
+{
+ "location":{
+  "mode": "province",
+  "data": {
+  	"region": 1,
+  	"province": 55
+  }
+ },
+ "year": 2017
+}
+\end{minted}
+
+\begin{multicols}{3}
+response =
+\begin{minted}[fontsize=\tiny]{javascript}
+{
+  {
+    "hospcode": "10716",
+    "inLab": [
+      {
+        "status": false,
+        "parseResult": {
+          "total": 0,
+          "good": 0,
+          "badLinesNo": [],
+          "badLines": []
+        }
+      },
+      ...
+    ],
+    "outLab": [
+      {
+        "status": false,
+        "parseResult": {
+          "total": 0,
+          "good": 0,
+          "badLinesNo": [],
+          "badLines": []
+        }
+      },
+      ...
+    ]
+  },
+  ...
+  {
+    "hospcode": "11453",
+    "inLab": [
+      {
+        "status": false,
+        "parseResult": {
+          "total": 0,
+          "good": 0,
+          "badLinesNo": [],
+          "badLines": []
+        }
+      },
+      ...
+    ]
+  },
+  ...,
+  {
+    "hospcode": "11180",
+    "inLab": [
+      {
+        "status": false,
+        "parseResult": {
+          "total": 0,
+          "good": 0,
+          "badLinesNo": [],
+          "badLines": []
+        }
+      },
+      ...
+    ],
+    "outLab": [
+      {
+        "status": false,
+        "parseResult": {
+          "total": 0,
+          "good": 0,
+          "badLinesNo": [],
+          "badLines": []
+        }
+      },
+      ...,
+      {
+        "status": false,
+        "parseResult": {
+          "total": 0,
+          "good": 0,
+          "badLinesNo": [],
+          "badLines": []
+        }
+      }
+    ]
+  }
+]
+\end{minted}
+\end{multicols}

@@ -1,0 +1,177 @@
+\chapter{Server API}
+    \section{Authentication}
+        % \begin{table}[ht!]
+        %     \begin{tabularx}{\textwidth}{|X|p{5cm}|X|X|}
+        %     \hline
+        %     % \multicolumn{3}{|c|}{Hand In Work} \\
+        %     % \hline
+        %     % https://en.wikibooks.org/wiki/LaTeX/Tables
+        %     Name & URL & POST Body & Response \\ 
+        %     \hline
+        %     log-In & /api/v1/auth/login & Username and Password &  \\ 
+        %     \hline
+        %     log-Out & /api/v1/auth/logout & asdad & asdad \\ 
+        %     \hline
+        %     \end{tabularx}
+        % \end{table}
+        \subsection{Log-In}
+            url = /api/v1/auth/login
+
+            body =
+            \begin{minted}[fontsize=\footnotesize]{javascript}
+                { 
+                    "username": <String>,
+                    "password": <String>
+                }
+            \end{minted}
+
+            response = 
+            \begin{minted}[fontsize=\footnotesize]{javascript}
+                { 
+                    "username": <String>,
+                    "roles": <Array>,
+                    "regions": <Array>,
+                    "provinces": <Array>,
+                    "hospcodes": <Array>
+                }
+            \end{minted}
+        
+        \subsection{Log-Out}
+            url = /api/v1/auth/logout
+            
+            response =
+            \begin{minted}[fontsize=\footnotesize]{javascript}
+                {
+                  "Bye": "Bye"
+                }
+            \end{minted}
+        
+    \section{At a Glance Report}
+    % hiv, hcv, hbv, tb
+        There contains many disease including HIV, HCV, HBV, and TB that can use this POST method. In here, we will show only HIV to be an example.
+        \newpage
+        \subsection{All}
+            url = /api/v1/hiv/at-a-glance/all
+            \input{appendices/api/at-a-glance-all.tex}
+        
+        \newpage
+        \subsection{Region}
+            url = /api/v1/hiv/at-a-glance/region/:region
+            \input{appendices/api/at-a-glance-region.tex}
+        
+        \newpage    
+        \subsection{Province}
+            url = /api/v1/hiv/at-a-glance/province/:province
+            \input{appendices/api/at-a-glance-province.tex}
+         
+        \newpage   
+        \subsection{Hospital}
+            url = /api/v1/hiv/at-a-glance/hospital/:hospcode
+            \input{appendices/api/at-a-glance-hospital.tex}
+            
+        % \begin{table}[ht!]
+            
+        %     \begin{tabularx}{\textwidth}{|X|p{5cm}|X|X|}
+        %     \hline
+        %     % \multicolumn{3}{|c|}{Hand In Work} \\
+        %     % \hline
+        %     Name & URL & POST Body & Response \\  
+        %     \hline
+        %     at a glance all & /api/v1/hiv/at-a-glance/all & Usernaem and Password &  \\ 
+        %     \hline
+        %     at a glance region & /api/v1/hiv/at-a-glance/region/:region & asdad & asdad \\ 
+        %     \hline
+        %     at a glance province & /api/v1/hiv/at-a-glance/province/:province & asdad & asdad \\ 
+        %     \hline
+        %     at a glance hospital & /api/v1/hiv/at-a-glance/hospital/:hospcode & asdad & asdad \\ 
+        %     \hline
+        %     \end{tabularx}
+        % \end{table}
+        
+    \newpage    
+    \section{Demographic}
+    % hiv, hcv, hbv, tb
+        There contains many disease including HIV, HCV, HBV, and TB that can use this POST method. In here, we will show only HIV to be an example. Note that for response of all hiv demographic api are the same, so we will only show it one at api of demographic-all.
+        \subsection{All}
+            url = /api/v1/hiv/demographic/all
+            \input{appendices/api/demographic-all.tex}
+        
+        \newpage   
+        \subsection{Region}
+            url = /api/v1/hiv/demographic/region/:region
+            \input{appendices/api/demographic-region.tex}
+            
+        \subsection{Province}
+            url = /api/v1/hiv/demographic/province/:province
+            \input{appendices/api/demographic-province.tex}
+            
+        \subsection{Hospital}
+            url = /api/v1/hiv/demographic/hospital/:hospcode
+            \input{appendices/api/demographic-hospital.tex}
+            
+        % \begin{table}[ht!]
+        %     \begin{tabularx}{\textwidth}{|X|p{5cm}|X|X|}
+        %     \hline
+        %     % \multicolumn{3}{|c|}{Hand In Work} \\
+        %     % \hline
+        %     Name & URL & POST Body & Response \\  
+        %     \hline
+        %     at a glance all & /api/v1/hiv/demographic/all & Username and Password &  \\ 
+        %     \hline
+        %     at a glance region & /api/v1/hiv/demographic/region/:region & asdad & asdad \\ 
+        %     \hline
+        %     at a glance province & /api/v1/hiv/demographic/province/:province & asdad & asdad \\ 
+        %     \hline
+        %     at a glance hospital & /api/v1/hiv/demographic/hospital/:hospcode & asdad & asdad \\ 
+        %     \hline
+        %     \end{tabularx}
+        % \end{table}
+       
+        
+    % \section{Workload Report}
+    % % HIV
+    %     \begin{table}[ht!]
+    %         \centering
+    %         \begin{tabularx}{\textwidth}{|X|X|X|X|}
+    %         \hline
+    %         % \multicolumn{3}{|c|}{Hand In Work} \\
+    %         % \hline
+    %         Name & URL & POST Body & Response \\ [0.5ex] 
+    %         \hline
+    %         at a glance all & /api/v1/workload/all & Usernaem and Password &  \\ 
+    %         \hline
+    %         at a glance region & /api/v1/workload/region/:region & asdad & asdad \\ 
+    %         \hline
+    %         at a glance province & /api/v1/workload/province/:province & asdad & asdad \\ 
+    %         \hline
+    %         at a glance hospital & /api/v1/workload/hospital/:hospcode & asdad & asdad \\ 
+    %         \hline
+    %         \end{tabularx}
+    %     \end{table}
+        
+    \section{Extralab}
+        %\subsection{Upload File}
+        %    url = /api/v1/extralab/upload
+        %    body = ????
+        %    response = ????
+            
+        \subsection{Check Upload File Status}
+            url = /api/v1/extralab/check-status
+            \input{appendices/api/check-upload-status.tex}
+            
+        % \begin{table}[ht!]
+        %     \begin{tabularx}{\textwidth}{|X|p{5cm}|X|X|}
+        %     \hline
+        %     % \multicolumn{3}{|c|}{Hand In Work} \\
+        %     % \hline
+        %     Name & URL & POST Body & Response \\ 
+        %     \hline
+        %     upload & /api/v1/extralab/upload & Usernaem and Password &  \\ 
+        %     \hline
+        %     checking upload status & /api/v1/extralab/check-status & asdad & asdad \\ 
+        %     \hline
+            
+        %     \end{tabularx}
+        % \end{table}
+    
+    

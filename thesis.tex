@@ -1,0 +1,124 @@
+% set the template of document
+\documentclass[natbib]{muthesis}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{float}
+\usepackage{etoolbox}
+\usepackage{mathtools,amsmath}
+% \usepackage{physics}
+\usepackage{empheq}
+\usepackage{esdiff}
+\usepackage{hyperref}
+\usepackage{placeins}
+\usepackage{pdflscape}
+\usepackage{tabularx}
+\usepackage{titlesec}
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+% this one for Appendix
+\usepackage[titletoc]{appendix}
+\usepackage{minted}
+\usepackage{multicol}
+\usepackage[final]{pdfpages}
+\setlength{\columnsep}{1cm}
+\usepackage{markdown}
+% https://www.sharelatex.com/learn/Code_Highlighting_with_minted
+
+\usepackage{listings}
+% https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
+
+
+\restylefloat{table}
+\restylefloat{figure}
+\bibliographystyle{plain} % if you are using bibtex
+
+% create new command for convenience
+% \newcommand{\beq}{\begin{equation}}
+% \newcommand{\eeq}{\end{equation}}
+% \newcommand{\bfig}{\begin{figure}}
+% \newcommand{\efig}{\end{figure}}
+% \newcommand{\bfa}{\left\{\begin{array}}
+% \newcommand{\efa}{\end{array}\right.}
+% \renewcommand{\arraystretch}{1.5}
+
+% set number of candidate (from 1 - 3) and advisor (from 1 - 2)
+\noofcandidate{3}
+\noofadvisor{1}
+
+% information for front page
+\title{Epidemic Intelligent Information System}
+\candidate{Paween Theanvanichpant}
+\secondcandidate{Peranat Lappakobkit}
+\thirdcandidate{Pimnipa Kanajarusroj}
+
+\degree{B.Sc.}
+\subject{Computer Science}
+\submissionyear{2017}
+
+% information for page i (advisors)
+\candidatetitle{}
+\majoradvisor{Piti Ongmongkolkul, Ph.D.}
+\majoradvisorsubject{Physics}
+
+% information for page ii (exam committee)
+\submissiondate{3rd April 2017}
+
+% Advisor
+\advisor{Piti Ongmongkolkul, Ph.D.}
+
+% Program Director
+\programdirector{Kanat Tangwongsan, Ph.D.}
+% Division Chair
+\chair{Asst. Prof. Aram Tangboondouangjit, Ph.D.}
+
+% information for page iv (ABSTRACT)
+
+\candidatenumber{5481071 ICCS/B}
+\secondcandidateno{5580968 ICCS/B}
+\thirdcandidateno{5581030 ICCS/B}
+
+%\longsubject
+\keywords{Web Application}
+
+% information for biography
+\input{biography.tex}
+
+\begin{document}
+
+    \maketitle
+    \input{acknowledgements.tex}
+    \input{abstract.tex}
+
+    % Table of content
+    \linespacing{1.2}
+    \tableofcontents
+    % \listoftables
+    \listoffigures
+    
+    
+    \linespacing{1.77}
+    
+    \input{chapters/01-introduction.tex}
+    \input{chapters/02-requirement.tex}
+    \input{chapters/03-system-analysis-and-design.tex}
+    \input{chapters/04-data-sources.tex}
+    \input{chapters/05-frontend-implementation.tex}
+    \input{chapters/06-backend-implementation.tex}
+    \input{chapters/07-deployment.tex}
+    \input{chapters/08-summary.tex}
+    \input{appendices/appendices.tex}
+   
+    \bibliography{ref}
+    
+    \biography
+
+\end{document}

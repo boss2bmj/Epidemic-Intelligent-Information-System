@@ -1,0 +1,7 @@
+\begin{minted}{docker}
+FROM tow02/sbt-docker
+WORKDIR /ictskimmer
+ADD ./ictskimmer /ictskimmer
+ENV ICTSKIMMER_ENV=production
+CMD ["sbt", "run seed"]
+\end{minted}

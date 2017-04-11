@@ -1,0 +1,54 @@
+\begin{minted}{yaml}
+version: '2'
+services:
+  nginx:
+    build:
+      context: ./nginx_docker
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - web
+      - backend
+    restart: unless-stopped
+  version-service:
+    build: .
+    expose:
+      - "5000"
+    restart: unless-stopped
+  web:
+    build:
+      context: ./epidemiologydatamart
+      dockerfile: Dockerfile
+    expose:
+      - "3000"
+    restart: unless-stopped
+  backend:
+    build:
+      context: ./ictskimmer
+      dockerfile: Dockerfile
+    expose:
+      - "4444"
+    volumes:
+      - $HOME/.ivy2:/root/.ivy2
+      - /output:/output
+      - /lab_upload:/lab_upload
+      - /home/mophict:/data:ro
+    depends_on:
+      - mongouser
+    restart: unless-stopped
+  seed:
+    build:
+      context: .
+      dockerfile: ./seed-docker/Dockerfile
+    volumes:
+      - $HOME/.ivy2:/root/.ivy2
+    depends_on:
+      - mongouser
+  mongouser:
+    image: mongo:3.4
+    restart: unless-stopped
+    volumes:
+      - /mongouser:/data/db
+
+\end{minted}

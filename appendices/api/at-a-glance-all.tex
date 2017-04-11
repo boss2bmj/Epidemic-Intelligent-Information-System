@@ -1,0 +1,78 @@
+\begin{multicols}{2}
+body = 
+\begin{minted}[fontsize=\scriptsize]{javascript}
+{
+	"disease": {
+		"criteria": "all",
+		"disease": "hiv"
+	},
+	"location": {
+		"data": {
+		},
+		"mode": "all"
+	},
+	"time":{
+		"cutoff": {
+			"month": 3,
+			"year": 2017
+		},
+		"interval": {
+			"end":{
+				"month": 3,
+				"year": 2017
+			},
+			"start":{
+				"month": 3,
+				"year": 2017
+			}
+		},
+		"mode": "all"	
+	}
+\end{minted}
+
+.
+\columnbreak
+
+response =
+\begin{minted}[fontsize=\scriptsize]{javascript}
+{
+  "summary": {
+    "thai": {
+      "total": 13954,
+      "alive": 13757,
+      "inSystem": 11586,
+      "lostFollowup": 2171,
+      "onDrug": 8518,
+      "vlActive": 25,
+      "hasVL": 1341,
+      "vlSuppressed": 9,
+      "foundWithinYear": 805,
+      "OI": 0,
+      "ipd": 618,
+      "death": 197,
+      "deathInyear": 50,
+      "hivRelatedDeath": 22,
+      "deathBeforeDrug": 4
+    },
+    "foreign": {
+      "total": 1587,
+      "alive": 1551,
+      "inSystem": 1122,
+      "lostFollowup": 429,A
+      "onDrug": 1032,
+      "vlActive": 6,
+      "hasVL": 48,
+      "vlSuppressed": 1,
+      "foundWithinYear": 158,
+      "OI": 0,
+      "ipd": 78,
+      "death": 36,
+      "deathInyear": 15,
+      "hivRelatedDeath": 8,
+      "deathBeforeDrug": 5
+    }
+  },
+  "byRegion": <String>
+}
+\end{minted}
+\end{multicols}

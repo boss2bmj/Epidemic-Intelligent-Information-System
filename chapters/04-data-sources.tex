@@ -1,0 +1,107 @@
+\chapter{Data Sources}
+\section{National Health Service Standard 43 folder}
+    National Health Service Standard 43 folder or 43 folder is a collection of more than 43 folder legislate from Ministry of Public Health (MoPH). In 43 folder, there are several information about the patients such as visiting information, diagnosis from both doctor and lab test, type and amount of drug that patient receive and what type of disease that patient have. This 43 folder cover nearly all of the patient information in Thailand including immigrant worker and foreigner, however it is only include patients information from hospital that under Ministry of Public Health (MoPH) exclude Bangkok. This is because hospital in Bangkok is under the management of Bangkok Administration.
+    
+\section{Data Schema}
+    In our system, we do not need all 43 folders to process the data. We only need the following folders.
+    
+    % Thai officer position in English
+    % http://wangkapee.uttaradit.police.go.th/InPos.html
+    % https://web.facebook.com/Ed1BO/posts/494806177306805?_rdr
+    
+    \subsection{PERSON}
+        In this folder, it stores the data of patient who does not live in hospital's region or patient who lives in hospital's region but his/her household registration is not in hospital's region. It is consist of hospcode(hospital code), CID (Citicen ID), PID (Patient ID), name, birth date and etc. For complete detail of PERSON folder you can look at \ref{person_folder}.
+    
+    \subsection{ADDRESS}
+        In this folder, it stores the address of a patient who lives outside responsible district or patient who live inside responsible district but his/her household registration is outside the district.For complete detail of ADDRESS folder you can look at \ref{address_folder}.
+        
+        % \input{chapters/chapter-04/address-folder.tex}
+        
+    \subsection{DEATH}
+        This folder stores the history of death of citizens who lived in the responsible district and patient. It consists of death date, disease code and etc.For complete detail of DEATH folder you can look at \ref{death_folder}.
+        % \input{chapters/chapter-04/death-folder.tex}
+        
+    \subsection{SERVICE}
+        In this folder, it contains the data about the history of the service that be provided to the patient who come to receive and also provide the service outside the hospital area.For complete detail of SERVICE folder you can look at \ref{service_folder}.
+        % \input{chapters/chapter-04/service.tex}
+        
+    \subsection{DIAGNOSIS\_OPD}
+        In this folder, it contains the diagnosis of the Out-patient and patient who come to receive the service. For complete detail of DIAGNOSIS\_OPD folder you can look at \ref{diagnosis_opd_folder}.
+        % \input{chapters/chapter-04/diagnosis-opd-folder.tex}
+        
+    \subsection{DRUG\_OPD}
+        In this folder, it contains the data that providing drug for Out-patient and patient who come to receive the service. For complete detail of DRUG\_OPD folder you can look at \ref{drug_opd_folder}.
+        % \input{chapters/chapter-04/drug-opd-folder.tex}
+        
+    \subsection{LABFU}
+        In this folder, it stores the  lab result that come from the lab of patient who have diseases. For complete detail of LABFU folder you can look at \ref{labfu_folder}.
+        % \input{chapters/chapter-04/labfu.tex}
+
+
+    \subsection{ADMISSION}
+        In this folder, it stores the history record of patient's admission of the hospital. For complete detail of ADMISSION folder you can look at \ref{admission_folder}.
+        % \input{chapters/chapter-04/admission-folder.tex}
+
+    \subsection{DIAGNOSIS\_IPD}
+        In this folder, it stores the data of diagnosis for In-patient. For complete detail of DIAGNOSIS\_IPD folder you can look at \ref{diagnosis_ipd_folder}.
+        % \input{chapters/chapter-04/diagnosis-ipd-folder.tex}
+    
+    \subsection{DRUG\_IPD}
+        In this folder, it contains the data that providing drug for In-patient. It contain types of drug and how much drug that have been use.For complete detail of DRUG\_IPD folder you can look at \ref{drug_ipd_folder}.
+        % \input{chapters/chapter-04/drug-ipd-folder.tex}
+        
+\section{43 Health Folder Relationship}
+    As we mention above that we don't need information from all 43 folder. Therefore we filter out the floder that relevant to our big problem which is include PERSON, ADDRESS, SERVICE, ADMISSION, LABFU, DEATH, DIAGNOSIS\_OPD, DIAGNOSIS\_IPD, DRUG\_OPD and DRUG\_IPD. Relationship between those folder was impact by the patient condition. Firstly, if there is a new patient come into the system then that patient personal information will go to PERSON and ADDRESS folder. Next if the patient come to only get diagnosis result and receive drug then go back home then those information will send to SERVICE, DIAGNOSIS\_OPD and DRUG\_OPD folder. Third, if patient need to admit to the hospital then those information will go to following folder; SERVICE, ADMISSION, DIAGNOSIS\_IPD, DRUG\_IPD folder. Fourth, if patient come to have lab test then the information will go to SERVICE and LABFU folder. Lastly, if there are any patient who die in the hospital area then those information will go to DEATH folder.
+        \FloatBarrier
+        \begin{figure}[h!]
+            \centering
+                % can use width=\linewidth
+        		\includegraphics[width=\linewidth]{images/chapter-04/43-folders-relationship.png}
+            	\caption{43 Folder Relationship}
+        		\label{figure-43-folder-relationship}
+        \end{figure}
+        \FloatBarrier
+
+\section{How the Data Flow} \label{section:how-the-data-flow}
+    % (2014 up to now) 946GB++
+    % Intro
+    To begin with, there are four main areas that the data goes through which are Hospital, Provincial Public Health Office(PHO), Ministry of Public Health-ICT(MoPH-ICT), and Bureau of Policy and Strategy(BPS) as shown in figure \ref{fig_data_flow1}. First of all, the data start at the hospital area when staff have to record their patient information when patient walk in to the hospital and check  by using the program that they have in order to record. This step is shown in number one in figure \ref{fig_data_flow1}. After finish the first phase, hospital have to send the data or we known as "43 file" to PHO in less than or equal 1 month. It mean that staff at hospital have to send the data to PHO every month as it shown in number two in figure \ref{fig_data_flow3}. Then the staff at PHO will verify the data that is sent by hospital, and then they will report the data  that have error back to hospital in order to review and fix the data. Every day the staff at PHO have to send the summary data such as record of patient that visit to hospital to MoPH-ICT. Also, PHO have to send 43-file to MoPH-ICT in every 15 days as it shown in figure \ref{fig_data_flow3}, then the staff of MoPH-ICT have to update data that they receive from PHO in a day. After that, the data will be updated to the system as show in number 4 in figure \ref{fig_data_flow4}, then the system will use that data to analysis and visualize the report to web-application as it shown in number 4 in figure \ref{fig_data_flow4}. In addition, the last area is BPS where the system will get the dead data that we are missing. The data that come in to the system do not cover all dead data, it include only dead data that patient who die in hospital, but it is not include the patient who die outside the hospital, so we have to make a request to get the missing dead data at BPS. However, we can not conclude yet that how we will get the data from BPS, it is still in the processing of discussion to find the way to get the dead data.
+
+    \FloatBarrier
+        \begin{figure}[h!]
+            \centering
+                % can use width=\linewidth
+            	\includegraphics[width=9cm]{images/chapter-04/data_flow1.png}
+            	\caption{Data Flow 1}
+            	\label{fig_data_flow1}
+        \end{figure}
+    \FloatBarrier
+    \FloatBarrier
+        \begin{figure}[h!]
+            \centering
+                % can use width=\linewidth
+            	\includegraphics[width=9cm]{images/chapter-04/data_flow2.png}
+            	\caption{Data Flow 2}
+            	\label{fig_data_flow2}
+        \end{figure}
+    \FloatBarrier
+    \FloatBarrier
+        \begin{figure}[h!]
+            \centering
+                % can use width=\linewidth
+            	\includegraphics[width=9cm]{images/chapter-04/data_flow3.png}
+            	\caption{Data Flow 3}
+            	\label{fig_data_flow3}
+        \end{figure}
+    \FloatBarrier
+    \FloatBarrier
+        \begin{figure}[h!]
+            \centering
+                % can use width=\linewidth
+            	\includegraphics[width=9cm]{images/chapter-04/data_flow4.png}
+            	\caption{Data Flow 4}
+            	\label{fig_data_flow4}
+        \end{figure}
+    \FloatBarrier
+    
+% death แจ้งผู้ใหญ่บ้าน

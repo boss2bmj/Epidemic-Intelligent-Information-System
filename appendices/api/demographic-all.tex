@@ -1,0 +1,184 @@
+\begin{multicols}{4}
+body = 
+\begin{minted}[fontsize=\tiny]{javascript}
+{
+ "nation": {
+  "nation": "all"
+ },
+ "time": {
+  "cutoff": {
+   "month": 3,
+   "year": 2017
+  },
+  "interval": {
+   "end": {
+    "month": 3,
+    "year": 2017
+   },
+   "start": {
+    "month": 3,
+    "year": 2016
+   }
+  },
+  "mode": "all"
+ },
+ "disease": {
+  "criteria": "all",
+  "disease": "hiv"
+ },
+ "location":{
+  "mode": "all",
+  "data": {}
+ }
+}
+\end{minted}
+
+.
+\columnbreak
+
+response=
+\begin{minted}[fontsize=\tiny]{javascript}
+{
+  "sex": {
+    "labels": [
+      "ชาย",
+      "หญิง"
+    ],
+    "counts": [
+      7797,
+      7744
+    ]
+  },
+  "nation": {
+    "labels": [
+      "ไทย",
+      "พม่า",
+      ...,
+      "ไร้สัญชาติ",
+    ],
+    "counts": [
+      13954,
+      726,
+      ...,
+      1
+    ]
+  },
+  "occupation": {
+    "labels": [
+      "คนงานรับจ้างทั่วไป",
+      "นักเรียน/นักศึกษา",
+      ...
+    ],
+    "counts": [
+      6502,
+      4251,
+      ...,
+      1
+    ]
+  },
+  "status": {
+    "labels": [
+      "คู่",
+      "โสด",
+      "ม่าย",
+      "แยก",
+      "ไม่ทราบ",
+      "สมณะ"
+    ],
+    "counts": [
+      8121,
+      6545,
+      298,
+      239,
+      95,
+      39
+    ]
+  },
+  "agesex": {
+    "labels": [
+      0,
+      1,
+      ...,
+      80
+    ],
+    "counts": [
+      13,
+      28,
+      ...,
+      2
+    ],
+    "male": [
+      5,
+      15,
+      ...,
+      2
+    ],
+    "female": [
+      8,
+      13,
+      ...,
+      0
+    ]
+  },
+  "hospcount": {
+    "labels": [
+      "โรงพยาบาลนครพิงค์",
+      "โรงพยาบาลสันป่าตอง",
+      ...,
+      "โรงพยาบาลเชียงดาว",
+    ],
+    "counts": [
+      3328,
+      1349,
+      ...,
+      1
+    ]
+  },
+  "province": {
+    "labels": [
+      "เชียงใหม่"
+    ],
+    "counts": [
+      15539
+    ]
+  },
+  "aidsstatus": {
+    "labels": [
+      "Non-AIDS",
+      "AIDS"
+    ],
+    "counts": [
+      11115,
+      4426
+    ]
+  },
+  "arvstatus": {
+    "labels": [
+      "Active Drug",
+      "Inactive Drug"
+    ],
+    "counts": [
+      9584,
+      5957
+    ]
+  },
+  "tbcount": {
+    "labels": [
+      "Non-TB",
+      "TB"
+    ],
+    "counts": [
+      14532,
+      1009
+    ]
+  },
+  "hivcascade": {
+    "total": 15541,
+    "hasDrug": 10891,
+    "inCare": 9634,
+    "vlActive": 33,
+    "vlSuppressed": 12
+  }
+}
+\end{minted}
+\end{multicols}

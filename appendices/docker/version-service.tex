@@ -1,0 +1,12 @@
+\begin{minted}{docker}
+FROM nginx
+WORKDIR /service
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install -y git curl
+ADD . /service
+COPY nginx.conf /etc/nginx/nginx.conf
+EXPOSE 5000
+RUN cd epidemiologydatamart && git rev-list --count HEAD > ../frontend_version.json
+RUN cd ictskimmer && git rev-list --count HEAD > ../backend_version.json
+\end{minted}

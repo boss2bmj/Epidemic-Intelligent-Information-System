@@ -1,0 +1,11 @@
+\begin{minted}{docker}
+FROM tow02/sbt-docker
+WORKDIR /api
+ADD . /api
+# cached friendly because mounted with ~/.ivy2
+# RUN sbt compile
+ENV ICTSKIMMER_ENV=production
+ENV JAVA_OPTS="-Xmx8G -XX:+UseG1GC"
+EXPOSE 4444
+CMD ["sbt", "run web"]
+\end{minted}

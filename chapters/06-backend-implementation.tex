@@ -1,0 +1,81 @@
+\chapter{Backend Implementation}
+
+    \section{Architecture Overview}
+        % Migrating from Express + MongoDB
+        % Reasons: MapReduce in MongoDB has price of speed performance
+        Before we choose Scalatra to be the server side of the system, we had been using Express\cite{expressjs} for the server and MongoDB\cite{mongodb} for the database. However, the reason why we migrate from this stack into Scalatra\cite{scalatra} is due to the performance of MapReduce in MongoDB. We use mapReduce database command for counting the number of people who has HIV, AIDS, TB, and STD disease in each case according to the requirements. MapReduce does not guarantee the speed of computation. It is not supposed to be used in the real time application. Moreover, as our system will contain more data, the speed performance will most likely to be dropped. This is the reason why we moved from Express and MongoDB stack into Scalatra for the backend.
+        
+    \section{Data Preprocessing}
+    
+        % ICT update data every 15 days via rsync command
+        % It took a whole day since size of data is huge (1 TB)
+        % contain irrelevant information (non-related visits)
+        % 946 GB (from 2014 to now), Person: 421,444,580, Diagnosis: 1,423,970,811 record
+        
+        As we mentioned earlier in chapter \ref{section:how-the-data-flow} of how the data flow. First, ICT will update the data which is all the records of 43 health folders to our server in every 15 days by using rsync command. However, the process takes a whole day since the size of the data is 946 GB (since 2014 until 30 March 2017) which almost 1 TB. It contains 421,444,580 people and 1,423,970,811 diagnosis record which are include irrelevant information about the visits that do not have diseases under surveillance such as patient received paracetamol, vitamin C and etc. Within this size of data, our server will not be able to process all the data in reasonable duration of time. Therefore, we need to do multiple steps of data preprocessing before our data is ready for production.
+        
+        Let begin with when our server receive the data we need to create indexing to filtering our relevant 43 folder such as PERSON, LABFU, DIAGNOSIS{\_}IPD, DIAGNOSIS{\_}OPD, DRUG{\_}IPD, and DRUG{\_}OPD etc. Those indexing file create under the condition that those record are possible to relate to disease under surveillance. There are 4 indexing file that we create. First file is hp file where it store the hospcode and PID. Second file name hpa contain hospcode, PID and AN (admission number). Third file is hps which contain hospcode, PID, and SEQ. Last file is hn which contain hospcode and HN for our extra lab file because some lab file that upload to our system are not contain PID that use to be the linker of patient and lab result. Note that in this step we already get some filter raw file include LABFU, DIAGNOSIS{\_}IPD, DIAGNOSIS{\_}OPD, DRUG{\_}IPD, and DRUG{\_}OPD.
+        
+        After we create indexing file, now we go in to the process of filtering where the size of data will going to be reduce. We filter all relevant 43 folder using the most appropriate indexing file we create in the previous step. First we use hp file to filter PERSON, DEATH, ADDRESS and PRENATAL folder. We use hpa file to filter ADMISSION folder and use hps to filter SERVICE folder to delete all unrelate case such as broken leg, headache and etc. We use hn file to link the patient and extra lab result together.
+        In addition, doing the process of filtering out some data we also anonymize all the sensitive information including hash all CID (Citizen identification number), change birth date to the first day of the month like 25 June 1956 to become 1 June 1956 because we only need to age of the patient and remove all first name, last name and etc. At the end of this process the data size will reduce very much for exmple in PERSON folder from approximate 400 million people to around 1 million people.
+        
+        Next, we need to perform indexing the data by hash cid. Before this step, all the data is grouped by province. However, if we group the data by province, it will be way more difficult to follow up the patient how many hospitals he/she visit in time series. Therefore, we need to perform indexing every record of the data by hash cid. First, we create a large hashmap by using hospcode and pid as the key to look for hash cid in PERSON folder. After that, we put the hash cid as the first column in every health folders that we use. We also perform sorting the data by hash cid.
+
+        To make our backend system be able to perform parallel processing task when receive such request, we create a virtual shard. First, we set a number of shards to be 256. Then, we iterate through each record of each person. Next, we check if the hash cid of that person modulo with number of shard (in this case, 256) equals to zero. If it is, we put the record of that person into that shard. By doing this, it will always guarantee that every record that belongs to one person will belong to exactly 1 shard. There will be no record of that person goes across the shard. By doing this, it will give us benefit of parallel processing.
+        
+        \FloatBarrier
+            \begin{figure}[h!]
+                \centering
+                    % can use width=\linewidth
+                	\includegraphics[width=\linewidth]{images/chapter-06/data_reduction.png}
+                	\caption{Data Preprocessing Diagram}
+                	\label{data_preprocessing}
+            \end{figure}
+        \FloatBarrier
+    
+    \section{Implementation}
+    
+        % \subsection{Skimming Data}
+        %     Originally, all the data from 43 folders that we got from Information Technology and Communication Center (under Office of the Permanent Secretary, Ministry of Public Health) since 2014 has the size of the data  more than 900 Gigabytes. It includes all the cases that patient visit to the hospital such as broken leg, headache, HIV, etc. Hence, every cases except HIV, AIDS, TB, and STD is irrelevant to our system.
+            
+        %     We filtered out the data that is not related to our system, hashing the citizen id number (protecting the privacy of the person), and group the remaining data by the hash result. We also sorted the data by the hash result. Hence, the size of the data is reduced into less than four Gigabytes.
+        %     % separate file and hash (group & sort)
+        % \subsection{Filter Data From Client Request} \label{filter-data}
+        %     First of all before we go through on how server side work, we will explain how each drop-down select works. There are four main type of drop-down select as shown below.
+        %     \input{chapters/chapter-05/filter-data.tex}
+    
+        \subsection{At a Glance Report}\label{at_a_glance_report_back_end}
+            As we know that we use POST method(for example, api/v1/hiv/at-a-glance/all) and pass it with body which contain all choose value that user choose in \ref{filter-data} then pass to the server. In server side, first it will filter by taking all the choose value to filter in order to make a correct structure and continue to do a map-reduce. After that it will return the json data to front-end.
+            
+            % all choose ==> filter ==> mapreduce ==> Json
+        
+        \subsection{Upload Lab File} \label{upload_file_back_end}
+            % Only UPLOADER can upload lab file to the system
+            The backend ensures that the user must have permission for uploading lab file into the server which mean the user must have "UPLOADER" role. Otherwise, it will reject by sending HTTP 401 status code (unauthorized). After the user uploaded the lab file, the server will response with total number of lines from the lab file, number of lines with correct format, number of lines with wrong format, and the lines with wrong format.
+        
+        \subsection{Checking Upload Lab File History Status }         \label{check_upload_history_status_ui_back_end}
+            For this feature, every roles of the user can view the status of the uploaded lab files whether it has been uploaded or not during the selected year that user selected. When the user send the request, the server will return every hospitals within the province from the request and mark both in-patient lab file and out-patient lab file with boolean status whether that lab file has been uploaded to the system or not.
+            
+        
+        \subsection{Demographics Report} \label{demographics_report_back_end}
+            
+            As we know that we use POST method(for example, /api/v1/hiv/demographic/all) and pass it with body which contain all choose value that user choose in \ref{filter-data} then pass to the server. In server side, first it will filter take all the choose value to filter in order to make a correct structure to continue to do a map-reduce. After that it will return the json data to front-end.
+        % all choose ==> filter ==> mapreduce ==> Json
+            
+            
+        % \subsection{Workload Report} \label{workload_report_backend}
+        
+        % \subsection{Individual Report}\label{individual_report_back_end}
+        
+        \subsection{Authentication}
+            \subsubsection{Login}
+                Authentication plays a major role in our system since the data is sensitive. We already create user accounts for all the users in our system. This means each hospital will have 1 account in our system. If the hospital's staff is changed, the account is still the same. If the user sign in successfully, we store the cookie into the browser. Otherwise, the server will return HTTP 401 status (unauthorized).
+            \subsubsection{Logout}
+                Once the user click logout on the web page, it will send the post request to /api/v1/auth/logout to the server. The server then will set the cookie to be expired and the user will need to login again to be able to interact with the system.
+        
+        
+    \section{Unit Testing}
+        We perform some unit testing on the backend since it defines the structural behavior of the system. There are some unit tests for API responses, authentication, model. We use ScalaTest\cite{scalatest} as our testing tool.
+
+% multiple inheritance 
+
